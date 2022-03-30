@@ -1,9 +1,6 @@
 const graphql = require('graphql');
 
 const _ = require('lodash');
-const {
-    NODE_ENV = 'development'
-} = process.env;
 
 const {
     parse,
@@ -24,7 +21,7 @@ module.exports = async (args = {}) => {
     } = args;
 
     // no need to validate schema each time in production, it is validated in tests
-    if (NODE_ENV !== 'production') {
+    if (process.env.VERCEL_ENV !== 'production') {
         const schemaValidationErrors = validateSchema(schema);
 
         if (_.size(schemaValidationErrors)) {
@@ -36,7 +33,7 @@ module.exports = async (args = {}) => {
 
     const documentAST = parseMemoized(source);
 
-    if (NODE_ENV !== 'production') {
+    if (process.env.VERCEL_ENV !== 'production') {
         // enable fields with same name and different types on union types
         // const rules = specifiedRules;
         const rules = _.filter(specifiedRules, rule => {
