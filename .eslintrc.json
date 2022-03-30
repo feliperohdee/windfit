@@ -1,3 +1,21 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "env": {
+      "es6": true
+  },
+  "rules": {
+      "@next/next/no-img-element": "off",
+      "comma-dangle": "warn",
+      "no-undef": "warn",
+      "import/no-anonymous-default-export": "off",
+      "no-unused-vars": [
+          "warn", {
+              "args": "none",
+              "ignoreRestSiblings": true
+          }
+      ],
+      "jsx-a11y/alt-text": "off",
+      "react/display-name": "off",
+      "semi": "warn"
+  }
 }

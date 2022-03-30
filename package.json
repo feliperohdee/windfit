@@ -1,20 +1,47 @@
 {
-  "name": "windfit",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "next": "12.1.2",
-    "react": "18.0.0",
-    "react-dom": "18.0.0"
-  },
-  "devDependencies": {
-    "eslint": "8.12.0",
-    "eslint-config-next": "12.1.2"
-  }
+    "name": "windfit",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "coverage": "rm -rf coverage; nyc ./node_modules/.bin/_mocha *.spec.js **/*.spec.js **/**/*.spec.js; rm -rf .nyc_output",
+        "start": "next start",
+        "lint": "next lint",
+        "test": "yarn validateQueries; ./node_modules/.bin/_mocha *.spec.js **/*.spec.js **/**/*.spec.js",
+        "validateQueries": "node ./scripts/validateQueries"
+    },
+    "dependencies": {
+        "dataloader": "^2.0.0",
+        "graphql": "^16.3.0",
+        "lodash": "^4.17.21",
+        "next": "12.1.2",
+        "object-hash": "^3.0.0",
+        "promise-jwt": "^1.0.1",
+        "react": "18.0.0",
+        "react-dom": "18.0.0"
+    },
+    "devDependencies": {
+        "chai": "^4.3.6",
+        "eslint": "8.12.0",
+        "eslint-config-next": "12.1.2",
+        "faker": "5.5.3",
+        "mocha": "^9.2.2",
+        "nyc": "^15.1.0",
+        "sinon": "^13.0.1",
+        "sinon-chai": "^3.7.0"
+    },
+    "nyc": {
+        "all": true,
+        "reporter": "lcov",
+        "exclude": [
+            "build/*",
+            "*.spec.js",
+            "**/*.spec.js",
+            "**/**/*.spec.js",
+            "constants/**",
+            "scripts/**",
+            "webpack*"
+        ]
+    }
 }

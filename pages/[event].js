@@ -1,18 +1,27 @@
 import _ from 'lodash';
 import Head from 'next/head';
 import Image from 'next/image';
-import Link from 'next/link';
 
 import styles from '../styles/Home.module.css';
 
+export async function getStaticPaths() {
+    return {
+        fallback: 'blocking',
+        paths: []
+    };
+};
+
 export async function getStaticProps(context) {
+    const {
+        params
+    } = context;
+
     try {
         const res = await fetch('http://localhost:3000/api/graphql', {
             body: JSON.stringify({
-                source: 'events',
+                source: 'event',
                 variableValues: {
-                    limit: 50,
-                    orderBy: [['title'], ['asc']]
+                    id: params.event
                 }
             }),
             headers: {
@@ -25,13 +34,13 @@ export async function getStaticProps(context) {
 
         return {
             props: {
-                events: response.data.events
+                event: response.data.event
             }
         };
     } catch (err) {
         return {
             props: {
-                events: []
+                event: null
             }
         };
     }
@@ -39,38 +48,34 @@ export async function getStaticProps(context) {
 
 export default props => {
     const {
-        events
+        event
     } = props;
 
     return (
         <div className={styles.container}>
             <Head>
-                <title>Windfit</title>
-                <meta name='description' content='All Events'/>
+                <title>Windfit - {event.name}</title>
+                <meta name='description' content={event.description}/>
                 <link rel='icon' href='/favicon.ico'/>
             </Head>
 
             <main className={styles.main}>
                 <h1 className={styles.title}>
-                    Welcome to <Link href='/'>Windfit Graphql Lab!</Link>
+                    {event.name}
                 </h1>
 
-                <p className={styles.description}>
-                    Showing {events.count} events.
-                </p>
-
-                <div className={styles.grid}>
-                    {_.map(events.data, event => {
-                        return (
-                            <Link key={event.id}
-                                href={`/${event.id}`}>
-                                <a className={styles.card}>
-                                    <h2>{event.name} &rarr;</h2>
-                                    <p>{event.description}</p>
-                                </a>
-                            </Link>
-                        );
-                    })}
+                <div className={styles.description}>
+                    {event.description}
+                    <br/>
+                    <ul>
+                        {_.map(event.partners, partner => {
+                            return (
+                                <li key={partner.id}>
+                                    {partner.name}
+                                </li>
+                            );
+                        })}
+                    </ul>
                 </div>
             </main>
 
