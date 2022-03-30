@@ -13,6 +13,7 @@ export async function getStaticProps(context) {
                 variableValues: {
                     limit: 50,
                     orderBy: [['title'], ['asc']]
+                    // orderBy: 'TITLE_ASC',
                 }
             }),
             headers: {

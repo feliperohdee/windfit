@@ -13,7 +13,7 @@ const fragments = {
             html
             raw
             short (
-                length: $shortLength
+                length: $shortDescriptionLength
             )
         }
         id
@@ -38,6 +38,7 @@ module.exports = {
     }
     
     ${fragments.event}`,
+    // 
     events: `query (
         $limit: Int
         $orderBy: Json
@@ -55,9 +56,35 @@ module.exports = {
     }
     
     ${fragments.event}`,
+    // 
+    isomorphicEvents: `query (
+        $limit: Int
+        $orderBy: EventsOrderBy
+        $shortDescriptionLength: Int
+        $withPartners: Boolean = true
+    ) {
+        isomorphicEvents (
+            limit: $limit
+            orderBy: $orderBy
+        ) {
+            count
+            data {
+                ...on Event {
+                    ...event
+                }
+                ...on SpecialEvent {
+                    ...specialEvent
+                }
+            }
+        }
+    }
+    
+    ${fragments.event}
+    ${fragments.specialEvent}`,
+    // 
     specialEvent: `query (
         $id: String
-        $shortLength: Int
+        $shortDescriptionLength: Int
         $withPartners: Boolean = true
     ) {
         specialEvent (

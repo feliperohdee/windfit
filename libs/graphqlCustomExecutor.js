@@ -14,6 +14,8 @@ const parseMemoized = _.memoize(source => {
     return parse(source);
 });
 
+const AVOID_CONFLICT = false;
+
 module.exports = async (args = {}) => {
     let {
         schema,
@@ -21,7 +23,7 @@ module.exports = async (args = {}) => {
     } = args;
 
     // no need to validate schema each time in production, it is validated in tests
-    if (process.env.VERCEL_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
         const schemaValidationErrors = validateSchema(schema);
 
         if (_.size(schemaValidationErrors)) {
@@ -33,17 +35,15 @@ module.exports = async (args = {}) => {
 
     const documentAST = parseMemoized(source);
 
-    if (process.env.VERCEL_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
         // enable fields with same name and different types on union types
         // const rules = specifiedRules;
         const rules = _.filter(specifiedRules, rule => {
             // console.log({
             //     rule: rule.name
             // });
-
-            const avoidConflict = false;
             
-            if (avoidConflict) {
+            if (AVOID_CONFLICT) {
                 return rule.name !== 'OverlappingFieldsCanBeMergedRule';
             }
 
