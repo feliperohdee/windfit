@@ -17,7 +17,7 @@ export async function getStaticProps(context) {
     } = context;
 
     try {
-        const res = await fetch('http://localhost:3000/api/graphql', {
+        const res = await fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/api/graphql`, {
             body: JSON.stringify({
                 source: 'event',
                 variableValues: {

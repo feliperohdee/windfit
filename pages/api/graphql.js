@@ -5,7 +5,7 @@ const backend = new Backend();
 export default async (req, res) => {
     req = backend.parseRequest(req);
 
-    if (1 || req.method === 'POST') {
+    if (req.method === 'POST') {
         const response = await backend.graphql(req);
 
         res.status(200)
